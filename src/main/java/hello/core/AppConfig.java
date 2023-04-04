@@ -13,8 +13,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * test commit check
  * Configuration 애플리케이션의 설정정보임을 명시해주는 어노테이션
- *ㅇㅇㅇㅇㅇ
  * @Bean 스프링 컨테이너에 등록
  */
 @Configuration
