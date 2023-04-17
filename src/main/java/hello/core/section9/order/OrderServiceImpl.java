@@ -1,8 +1,8 @@
-package hello.core.section8.order;
+package hello.core.section9.order;
 
-import hello.core.section8.discount.DiscountPolicy;
-import hello.core.section8.member.Member;
-import hello.core.section8.member.MemberRepository;
+import hello.core.section9.discount.DiscountPolicy;
+import hello.core.section9.member.Member;
+import hello.core.section9.member.MemberRepository;
 
 public class OrderServiceImpl implements OrderService {
 

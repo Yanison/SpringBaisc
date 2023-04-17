@@ -1,6 +1,6 @@
-package hello.core.section8.discount;
+package hello.core.section9.discount;
 
-import hello.core.section8.member.Member;
+import hello.core.section9.member.Member;
 
 public interface DiscountPolicy {
     /**

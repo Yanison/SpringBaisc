@@ -1,13 +1,13 @@
-package hello.core.section8;
+package hello.core.section9;
 
-import hello.core.section8.discount.DiscountPolicy;
-import hello.core.section8.discount.FixDiscountPolicy;
-import hello.core.section8.member.MemberRepository;
-import hello.core.section8.member.MemberService;
-import hello.core.section8.member.MemberServiceImpl;
-import hello.core.section8.member.MemoryMemberRepository;
-import hello.core.section8.order.OrderService;
-import hello.core.section8.order.OrderServiceImpl;
+import hello.core.section9.discount.DiscountPolicy;
+import hello.core.section9.discount.FixDiscountPolicy;
+import hello.core.section9.member.MemberRepository;
+import hello.core.section9.member.MemberService;
+import hello.core.section9.member.MemberServiceImpl;
+import hello.core.section9.member.MemoryMemberRepository;
+import hello.core.section9.order.OrderService;
+import hello.core.section9.order.OrderServiceImpl;
 
 public class AppConfig2 {
     /**

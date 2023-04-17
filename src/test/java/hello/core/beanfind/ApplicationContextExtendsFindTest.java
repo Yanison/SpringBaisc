@@ -1,8 +1,8 @@
 package hello.core.beanfind;
 
-import hello.core.section8.discount.DiscountPolicy;
-import hello.core.section8.discount.FixDiscountPolicy;
-import hello.core.section8.discount.RateDiscountPolicy;
+import hello.core.section9.discount.DiscountPolicy;
+import hello.core.section9.discount.FixDiscountPolicy;
+import hello.core.section9.discount.RateDiscountPolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.NoUniqueBeanDefinitionException;

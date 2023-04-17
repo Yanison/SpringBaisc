@@ -1,9 +1,9 @@
 package hello.core;
 
-import hello.core.section8.AppConfig;
-import hello.core.section8.member.Grade;
-import hello.core.section8.member.Member;
-import hello.core.section8.member.MemberService;
+import hello.core.section9.AppConfig;
+import hello.core.section9.member.Grade;
+import hello.core.section9.member.Member;
+import hello.core.section9.member.MemberService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -1,9 +1,9 @@
 package hello.core.singleton;
 
-import hello.core.section8.AppConfig;
-import hello.core.section8.member.MemberRepository;
-import hello.core.section8.member.MemberServiceImpl;
-import hello.core.section8.order.OrderServiceImpl;
+import hello.core.section9.AppConfig;
+import hello.core.section9.member.MemberRepository;
+import hello.core.section9.member.MemberServiceImpl;
+import hello.core.section9.order.OrderServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

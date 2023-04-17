@@ -1,8 +1,8 @@
 package hello.core.discount;
 
-import hello.core.section8.discount.RateDiscountPolicy;
-import hello.core.section8.member.Grade;
-import hello.core.section8.member.Member;
+import hello.core.section9.discount.RateDiscountPolicy;
+import hello.core.section9.member.Grade;
+import hello.core.section9.member.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
