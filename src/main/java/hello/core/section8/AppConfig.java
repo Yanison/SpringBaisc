@@ -1,14 +1,13 @@
-package hello.core;
+package hello.core.section8;
 
-import hello.core.discount.DiscountPolicy;
-import hello.core.discount.FixDiscountPolicy;
-import hello.core.discount.RateDiscountPolicy;
-import hello.core.member.MemberRepository;
-import hello.core.member.MemberService;
-import hello.core.member.MemberServiceImpl;
-import hello.core.member.MemoryMemberRepository;
-import hello.core.order.OrderService;
-import hello.core.order.OrderServiceImpl;
+import hello.core.section8.discount.DiscountPolicy;
+import hello.core.section8.discount.RateDiscountPolicy;
+import hello.core.section8.member.MemberRepository;
+import hello.core.section8.member.MemberService;
+import hello.core.section8.member.MemberServiceImpl;
+import hello.core.section8.member.MemoryMemberRepository;
+import hello.core.section8.order.OrderService;
+import hello.core.section8.order.OrderServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -33,6 +32,7 @@ public class AppConfig {
     @Bean
     private static MemberRepository memberRepository() {
         System.out.println("call AppConfig.memberRepository");
+
         return new MemoryMemberRepository();
     }
     
@@ -41,5 +41,11 @@ public class AppConfig {
 
         System.out.println("call AppConfig.orderService");
         return new OrderServiceImpl(memberRepository(),discountPolicy());
+    }
+
+    @Bean
+    public DiscountPolicy discountPolicy(){
+        System.out.println("call AppConfig.discountPolicy");
+        return new RateDiscountPolicy();
     }
 }

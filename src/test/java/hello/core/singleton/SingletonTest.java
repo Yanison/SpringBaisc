@@ -1,8 +1,7 @@
 package hello.core.singleton;
 
-import hello.core.AppConfig;
-import hello.core.member.MemberService;
-import org.assertj.core.api.Assertions;
+import hello.core.section8.AppConfig;
+import hello.core.section8.member.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;

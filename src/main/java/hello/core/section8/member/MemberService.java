@@ -1,4 +1,4 @@
-package hello.core.member;
+package hello.core.section8.member;
 
 public interface MemberService {
     void join(Member member);
