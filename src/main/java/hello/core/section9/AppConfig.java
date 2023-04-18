@@ -32,7 +32,6 @@ public class AppConfig {
     @Bean
     private static MemberRepository memberRepository() {
         System.out.println("call AppConfig.memberRepository");
-
         return new MemoryMemberRepository();
     }
     
