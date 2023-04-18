@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
  * @Configuration 을 사용하면 CGLIB을 사용해서 이미 등록한 빈이 있으면
  * 호출해서 반환한다. 그렇기 때문에 스프링 컨테이너가 싱글톤을 보장할 수 있었던 것
  */
-//@Configuration
+@Configuration
 public class AppConfig {
     /**
      * 스프링을 사용하면 스프링이 대신 감독을 해준다.
@@ -37,7 +37,7 @@ public class AppConfig {
     /**
      * @return
      */
-    
+
     @Bean
     public OrderService orderService(){
         System.out.println("@TEST@ call AppConfig.orderService");

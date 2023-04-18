@@ -1,7 +1,12 @@
 package hello.core.section9.member;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class MemberServiceImpl implements MemberService{
 
+    @Autowired // @Component를 쓰면 autowired를 쓰게 된다. ac.getBean(MemberRepository.class)와 같다.
     private final MemberRepository memberRepository;
     public MemberServiceImpl(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
@@ -20,5 +25,4 @@ public class MemberServiceImpl implements MemberService{
     public MemberRepository getMemberRepository(){
         return memberRepository;
     }
-
 }
