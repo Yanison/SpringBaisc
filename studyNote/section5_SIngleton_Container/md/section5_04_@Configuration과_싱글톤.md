@@ -16,11 +16,35 @@ public class AppConfig {
         System.out.println("call AppConfig.memberService");
         return new MemberServiceImpl(memberRepository());
     }
+
     @Bean
-    private static MemberRepository memberRepository() {
+    public MemberRepository memberRepository() {
         System.out.println("call AppConfig.memberRepository");
         return new MemoryMemberRepository();
     }
+
+    /**
+     * 주의! @Conficuration 과 Bean 조합으로 싱글톤을 보장하는 경우는 정적이지 않은 메소드일때 이다. 
+     * 정적 메서드에 @Bean을 사용하게 되면 싱글톤 보장을 위한 지원을 받지 못한다.
+     * 
+     * By marking this method as static, <br>
+     * it can be invoked without causing instantiation of its declaring @Configuration class, <br>
+     * thus avoiding the above-mentioned lifecycle conflicts.  <br>
+     * Note however that static @Bean methods will not be enhanced  <br>
+     * for scoping and AOP semantics as mentioned above <br>
+     * 
+     * static 메소드로 선언하면 @Configuration을 클래스의 인스턴스 없이 호출할 수 있고 라이프 사이클의 충돌도 방지할 수 있다. 
+     * <br> 하지만 static @Bean 메소드는 스코핑이나 AOP를 개선시키지 못한다.
+     * 
+     * https://docs.spring.io/spring-framework/docs/6.0.x/javadoc-api/org/springframework/context/annotation/Bean.html
+     * 
+     * @Bean
+        private static MemberRepository memberRepository() {
+        System.out.println("call AppConfig.memberRepository");
+        return new MemoryMemberRepository();
+        }
+     */
+    
     
     @Bean
     public OrderService orderService(){
@@ -56,14 +80,13 @@ public class ConfigurationSingletonTest {
 
         System.out.println("memberService -> memberRepository =" + memberRepository1);
         System.out.println("memberService -> memberRepository =" + memberRepository2);
-    }
 
-    @Test
-    void configurationDeep(){
-        ApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
-        AppConfig bean = ac.getBean(AppConfig.class);
-
-        System.out.println("bean = " + bean.getClass());
+        Assertions.assertThat(memberService.getMemberRepository()).isSameAs(memberRepository);
+        Assertions.assertThat(orderService.getMemberRepository()).isSameAs(memberRepository);
     }
 }
 ```
+
+- memoryRepository 인스턴스는 모두 같은 인스턴스가 공유되어 사용된다. 
+- AppConfig의 자바 코드를 보면 분명히 각각 2번 "new MemoryMemberRepository()" 가 호출되었는데, 실제로는 1번만 호출되었다.
+
