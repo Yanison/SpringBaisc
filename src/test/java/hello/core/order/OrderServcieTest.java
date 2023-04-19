@@ -6,6 +6,7 @@ import hello.core.section9.member.Member;
 import hello.core.section9.member.MemberService;
 import hello.core.section9.order.Order;
 import hello.core.section9.order.OrderService;
+import hello.core.section9.order.OrderServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -22,5 +23,10 @@ public class OrderServcieTest {
 
         Order order = orderService.creatOrder(memberId,"itemA",10000);
         Assertions.assertThat(order.getDiscountPrice()).isEqualTo(1000);
+    }
+
+    @Test
+    void fieldInjectionTest(){
+        OrderServiceImpl orderService = new OrderServiceImpl();
     }
 }

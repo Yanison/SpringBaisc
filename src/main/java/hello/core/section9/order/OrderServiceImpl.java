@@ -15,14 +15,14 @@ public class OrderServiceImpl implements OrderService {
      *
      * 때문에 OrderServiceImpl는 의존관계에 대한 고민은 외부에 맡기고 오직 로직 실행에만 집중 하면 된다.
      */
-    private final MemberRepository memberRepository;
-    private final DiscountPolicy discountPolicy;
+    @Autowired private MemberRepository memberRepository;
+    @Autowired private DiscountPolicy discountPolicy;
 
-    @Autowired
-    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-        this.memberRepository = memberRepository;
-        this.discountPolicy = discountPolicy;
-    }
+//    @Autowired
+//    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+//        this.memberRepository = memberRepository;
+//        this.discountPolicy = discountPolicy;
+//    }
 
     @Override
     public Order creatOrder(Long memberId, String itemName, int itemPrice) {

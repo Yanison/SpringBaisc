@@ -1,58 +1,203 @@
-# 중복 등록과 충돌
+# 다양한 의존관계 주입
 
-#### 컴포넌트 스캔에서 같은 빈 이름을 등록하면 어떻게 될까?
-#### 다음 두가지 상황이 발생된다. 
+#### 의존관계 주입은 크게 4가지 방법이 있다.
+- 생성자 주입
+- 수정자 주입(setter 주입)
+- 필드 주입
+- 일반 메서드 주입
 
+## 생성자 주입
 
-1. 자동 빈 등록 vs 자동 빈 등록
-2. 자동 빈 등록 vs 수동 빈 등록
-
-### 자동 빈 등록 vs 자동 빈 등록
-- 스프링 부트는 자동 빈 등록과 수동 빈 등록을 모두 지원한다.
-  - 자동 빈 등록 : @ComponentScan
-  - 수동 빈 등록 : @Configuration, @Bean
+- 이름 그대로 생성자를 통해서 의존관계를 주입하는 방법이다.
+- 지금까지 우리가 사용한 방법이다.
+- 특징
+  - 생성자 호출 시점에 딱 1번만 호출되는 것을 보장한다.
+  - 불변, 필수 의존관계에 사용한다.
 
 ```java
-import java.beans.ConstructorProperties;
+public class MemberServiceImpl implements MemberService {
+    private final MemberRepository memberRepository;
+    @Autowired
+    public MemberServiceImpl(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+}
+```
+"좋은 아키텍쳐는 Limit, 제한이 있어야 한다."
 
-@Configuration
-@ConstructorProperties(
-        exclude = @Filter(type = FilterType.ANNOTATION, classes = Configuration.class)
-)
-public class AutoAppConfig {
-    // 수동 빈 등록
-    @Bean(name = "memoryMemberRepository")
-    MemberRepository memberRepository() {
-        return new MemoryMemberRepository();
+
+#### 생성자가 1개일땐 @Autowired를 생략해도 된다.
+
+```java
+public class MemberServiceImpl implements MemberService {
+    private final MemberRepository memberRepository;
+    //@Autowired 생략
+    public MemberServiceImpl(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
     }
 }
 ```
 
-이 경우는 수동 빈 등록이 우선권을 가진다.
-(수동 빈이 자동 빈을 오버라이딩 해버린다.)
+#### 생성자가 1개가 아닐땐 @Autowired를 생략하면 안된다.
 
-#### "수동 빈 등록시 남는 로그"
-```text
-Overriding bean definition for bean 'memoryMemberRepository' with a different
-definition : replacing
+```java
+import com.sun.org.apache.xpath.internal.operations.Or;
 
--> memoryMemberRepository라는 이름의 빈을 다른 빈으로 대체하고 있습니다.
+public class OrderServiceImpl implements OrderService {
+  private final MemberRepository memberRepository;
+  private final DiscountPolicy discountPolicy;
+
+  public OrderServiceImpl(){}
+
+  @Autowired
+  public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+    this.memberRepository = memberRepository;
+    this.discountPolicy = discountPolicy;
+  }
+}
 ```
 
-몰론 개발자가 의도적으로 이런 결과를 기대했다면, 자동 보다는 수동이 우선권을 가지는 것이 좋다.<br>
-하지만 현실은 개발자가 와도 의도적으로 설정해서 이런결과가 만들어지기 보다는 여러 설정들이 꼬여서 이런 결과가 만들어지는 경우가 대부분이다.<br>
-"그러면 정말 잡기 어려운 버그가 만들어진다. 항상 잡기 어려운 버그는 애매한 버그다"
-그래서 최근 스프링 부트에서는 수동 빈 등록과 자동 빈 등록이 충돌이나면 오류가 발생하도록 기본 값을 바꾸었다.
 <br>
-<br>
-#### "수동 빈 등록,자동 빈 등록 오류시 스프링 부트 에러"
-```text
-'Consider renaming one of the beans or enabling overriding by serring spring.main.allow-bean-definition-overriding=true'
+#### 수정자 주입(setter 주입)
+
+- setter를 통해서 의존관계를 주입하는 방법이다.
+- 특징
+  - 선택, 변경 가능성이 있는 의존관계에 사용한다.
+  - 자바빈 프로퍼티 규약의 수정자 메서드 방식을 사용한다.
+
+```java
+public class OrderServiceImpl implements OrderService {
+    private MemberRepository memberRepository;
+    private DiscountPolicy discountPolicy;
+
+    @Autowired
+    public void setMemberRepository(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+
+    @Autowired
+    public void setDiscountPolicy(DiscountPolicy discountPolicy) {
+        this.discountPolicy = discountPolicy;
+    }
+}
 ```
 <br>
+
+```text
+참고로 @Autowired 의 기본 동작은 주입할 대상이 없으면 오류가 발생한다. 
+주입할 대상이 없어도 동작하게 하려면 @Autowired(required = false) 처럼 지정하면 된다.
+
+자바빈 프로퍼티, 자바에서는 과거부터 필드의 값을 직접 변경하지 않고, setXxx,getXxx 라는 메서드를 통해서 값을 읽거나
+수정하는 규칙을 만들었었는데, 그것이 자바빈 프로퍼티 규칙이다. 더 자세한 내용이 궁금하면 자바 빈 프로퍼티로 검색해보자
+```
+
 <br>
-스프링 부트인 'CoreApplication'을 실행하면 위와 같은 에러가 발생한다.<br>
+
+#### 자바빈 프로퍼티 규약 예시
+```java
+public class Member {
+    private Long id;
+    private String name;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+```
+<br>
+#### 필드 주입
+- 이름 그대로 필드에 바로 주입하는 방법이다.  
+- 특징
+  - 코드가 간결해서 많은 개발자들이 좋아한다. 그렇지만 외부에서 변경이 불가능해서 테스트 하기 힘들다는 치명적인 단점이 있다.
+  - DI 프레임워크가 없으면 아무것도 할 수 없다.
+  - public이면 어디서든 변경이 가능하다.
+  - 권장하지 않는다.
+- 이럴땐 사용해도 괜찮다.
+  - 테스트 코드를 간결하게 만들기 위해서
+  - @Configuration 과 같이 사용한다.
+
+```java
+public class OrderServiceImpl implements OrderService {
+    @Autowired private MemberRepository memberRepository;
+    @Autowired private DiscountPolicy discountPolicy;
+}
+```
+
+<br>
 
 
+#### @Congiguration 과 함께 사용하는 필드 주입
+```java
+@Component
+public class OrderServiceImpl implements OrderService {
+  @Autowired private MemberRepository memberRepository;
+  @Autowired private DiscountPolicy discountPolicy;
 
+//    @Autowired
+//    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+//        this.memberRepository = memberRepository;
+//        this.discountPolicy = discountPolicy;
+//    }
+}
 
+@Configuration
+@ComponentScan(
+        excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Configuration.class)
+)
+public class AutoAppConfig {
+  @Autowired MemberRepository memberRepository;
+  @Autowired DiscountPolicy discountPolicy;
+
+  @Bean(name = "memoryMemberRepository")
+  MemberRepository memberRepository() {
+    return new MemoryMemberRepository();
+  }
+}
+
+```
+
+<br>
+
+#### 일반 메서드 주입
+- 일반 메서드를 통해서 의존관계를 주입하는 방법이다.
+- 특징
+  - 한번에 여러 필드를 주입할 수 있다.
+  - 일반적으로 잘 사용하지 않는다.
+  - 생성자와 수정자 주입으로 대부부 해결하기 때문에 잘 사용하지 않는다.
+
+```java
+public class OrderServiceImpl implements OrderService {
+    private MemberRepository memberRepository;
+    private DiscountPolicy discountPolicy;
+
+    @Autowired // init이라는 메서드를 수정자 주입처럼 주입한다.
+    public void init(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
+}
+```
+
+<br>
+
+### 정리
+
+#### 의존관계 주입은 다음 4가지 방법이 있다.
+- 생성자 주입
+- 수정자 주입(setter 주입)
+- 필드 주입
+- 일반 메서드 주입
+
+생성자와 수정자 주입으로 대부분이 해결된다. 필드주입은 비즈니스 로직에 절대 사용하지 말자.
