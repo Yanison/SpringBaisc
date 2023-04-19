@@ -54,3 +54,5 @@ definition : replacing
 스프링 부트인 'CoreApplication'을 실행하면 위와 같은 에러가 발생한다.<br>
 
 
+
+
